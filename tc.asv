@@ -1,0 +1,24 @@
+function [xtc, ytc] = tc(data, time)
+    % Extract data and time from the structure
+    
+    % Initial value and steady-state value
+    y0 = data(1);
+    yst = data(end);
+    
+    % Calculate the 10% growth value
+    y10procent = y0 + 0.1 * (yst - y0);
+    y90procent = y0 + 0.9 * (yst - y0);
+    
+    % Find the index where the data first reaches or exceeds the 10% growth value
+    target10 = find(data >= y10procent, 1, 'first');
+    target90 = find(data >= y90procent, 1, 'first');
+
+    % Check if the target index is found
+    if isempty(target10) || isempty(target90)
+        disp('The system does not reach 10% or 90% of the growth value within the given data.');
+        xtc = NaN; % Return NaN if the value is not reached
+    else
+        tc = time(target90) - time(target10);
+    end
+    
+end
